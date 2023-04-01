@@ -71,18 +71,6 @@ class RequestQueryFeatureHydrator[
     val featureMap = FeatureMapBuilder()
       .add(AccountAgeFeature, query.getOptionalUserId.flatMap(SnowflakeId.timeFromIdOpt))
       .add(ClientIdFeature, query.clientContext.appId)
-      /**
-       * These author ID lists are used purely for metrics collection. We track how often we are
-       * service Tweets from these authors and how often their tweets are being impressed by users.
-       * This helps us validate in our A/B experimentation platrofm that we do not ship changes
-       * that negatively impacts one group over others.
-      .add(DDGStatsDemocratsFeature, ddgStatsAuthors.longSeq(Democrats).toSet)
-      .add(DDGStatsRepublicansFeature, ddgStatsAuthors.longSeq(Republicans).toSet)
-      .add(DDGStatsVitsFeature, ddgStatsAuthors.longSeq(Vits).toSet)
-      .add(DDGStatsElonFeature, ddgStatsAuthors.longValue(Elon))
-       * IOW if an algorithm change solely impacted Elon (for better or worse), they would not implement it?
-       * I'd be surprised if there isn't a more sophisticated A/B checking that scores based on the SimClusters, GraphJet etc.
-       */
       .add(DeviceLanguageFeature, query.getLanguageCode.map(getLanguageISOFormatByCode))
       .add(
         GetInitialFeature,
